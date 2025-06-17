@@ -1,0 +1,61 @@
+# docker-compose.yml
+# A diretiva "version" foi removida, pois não é mais necessária
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.frontend
+    networks:
+      - fenix-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env.backend
+    networks:
+      - fenix-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    
+  nginx:
+    image: nginx:stable-alpine
+    restart: always
+    ports:
+      - "80:80"
+      # Remova a porta 443 até configurarmos SSL
+      # - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # Remova o volume letsencrypt até termos os certificados
+      # - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - frontend
+    networks:
+      - fenix-network
+
+networks:
+  fenix-network:
+    driver: bridge

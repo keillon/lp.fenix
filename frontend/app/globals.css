@@ -1,0 +1,223 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+ :root {
+   --background: 0 0% 100%;
+   --foreground: 222.2 84% 4.9%;
+   --card: 0 0% 100%;
+   --card-foreground: 222.2 84% 4.9%;
+   --popover: 0 0% 100%;
+   --popover-foreground: 222.2 84% 4.9%;
+   --primary: 221.2 83.2% 53.3%;
+   --primary-foreground: 210 40% 98%;
+   --secondary: 210 40% 96.1%;
+   --secondary-foreground: 222.2 47.4% 11.2%;
+   --muted: 210 40% 96.1%;
+   --muted-foreground: 215.4 16.3% 46.9%;
+   --accent: 210 40% 96.1%;
+   --accent-foreground: 222.2 47.4% 11.2%;
+   --destructive: 0 84.2% 60.2%;
+   --destructive-foreground: 210 40% 98%;
+   --border: 214.3 31.8% 91.4%;
+   --input: 214.3 31.8% 91.4%;
+   --ring: 221.2 83.2% 53.3%;
+   --radius: 0.5rem;
+ }
+
+ .dark {
+   --background: 222.2 84% 4.9%;
+   --foreground: 210 40% 98%;
+   --card: 222.2 84% 4.9%;
+   --card-foreground: 210 40% 98%;
+   --popover: 222.2 84% 4.9%;
+   --popover-foreground: 210 40% 98%;
+   --primary: 217.2 91.2% 59.8%;
+   --primary-foreground: 222.2 47.4% 11.2%;
+   --secondary: 217.2 32.6% 17.5%;
+   --secondary-foreground: 210 40% 98%;
+   --muted: 217.2 32.6% 17.5%;
+   --muted-foreground: 215 20.2% 65.1%;
+   --accent: 217.2 32.6% 17.5%;
+   --accent-foreground: 210 40% 98%;
+   --destructive: 0 62.8% 30.6%;
+   --destructive-foreground: 210 40% 98%;
+   --border: 217.2 32.6% 17.5%;
+   --input: 217.2 32.6% 17.5%;
+   --ring: 224.3 76.3% 48%;
+ }
+}
+
+@layer base {
+ * {
+   @apply border-border;
+ }
+ body {
+   @apply bg-background text-foreground;
+   scroll-behavior: smooth;
+ }
+ 
+ /* Regra global para imagens otimizada */
+ img {
+   max-width: 100%;
+   height: auto;
+   display: block;
+   object-position: center;
+ }
+}
+
+/* Melhorar a experiência de rolagem */
+html {
+ scroll-behavior: smooth;
+ scroll-padding-top: 80px;
+ font-display: optional;
+}
+
+/* Classes específicas para imagens que não interferem no carregamento */
+.img-fluid {
+ max-width: 100%;
+ height: auto;
+}
+
+.img-fixed-height {
+ width: auto;
+ max-height: 100%;
+}
+
+.img-cover {
+ object-fit: cover;
+ width: 100%;
+ height: 100%;
+}
+
+.img-contain {
+ object-fit: contain;
+ width: 100%;
+ height: 100%;
+}
+
+/* Resolver problemas de layout com imagens */
+.img-wrapper {
+ position: relative;
+ display: block;
+ overflow: hidden;
+}
+
+/* Evita problemas com lazy-loading */
+img[loading="lazy"] {
+ opacity: 0;
+ transition: opacity 0.3s;
+}
+
+img[loading="lazy"].loaded {
+ opacity: 1;
+}
+
+/* Fix para imagens SVG */
+svg {
+ display: inline-block;
+ vertical-align: middle;
+}
+
+/* Estilos para animações */
+.animation-delay-2000 {
+ animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+ animation-delay: 4s;
+}
+
+/* Placeholders para conteúdo em carregamento */
+.placeholder {
+ background-color: #f3f4f6;
+ animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+ 0%, 100% {
+   opacity: 1;
+ }
+ 50% {
+   opacity: 0.7;
+ }
+}
+
+/* Otimização de desempenho para animações */
+.gpu-accelerated {
+ transform: translateZ(0);
+ backface-visibility: hidden;
+ perspective: 1000px;
+}
+
+/* Garantir dimensões estáveis para elementos principais */
+.maintain-size {
+ min-height: var(--min-height, auto);
+ transition: min-height 0.2s ease-in-out;
+}
+
+/* Melhorar o comportamento de imagens durante o carregamento */
+.content-visibility-auto {
+ content-visibility: auto;
+ contain-intrinsic-size: 0 500px;
+}
+
+/* Prevenir mudanças de layout (CLS) */
+.anti-cls {
+ display: block;
+ position: relative;
+ height: auto;
+ min-height: 1px;
+ contain: layout style paint;
+}
+
+/* Para seções com carregamento dinâmico */
+.section-skeleton {
+ background: linear-gradient(
+   90deg,
+   rgba(243, 244, 246, 0.8) 0%,
+   rgba(209, 213, 219, 0.8) 50%,
+   rgba(243, 244, 246, 0.8) 100%
+ );
+ background-size: 200% 100%;
+ animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+ 0% {
+   background-position: 200% 0;
+ }
+ 100% {
+   background-position: -200% 0;
+ }
+}
+
+/* Otimização para renderização em dispositivos móveis */
+@media (max-width: 768px) {
+ .mobile-optimize {
+   content-visibility: auto;
+   contain-intrinsic-size: 0 300px;
+ }
+}
+
+/* Prevenir FOUC (Flash of Unstyled Content) */
+.no-fouc {
+ opacity: 0;
+ animation: fadeIn 0.2s ease-in forwards;
+}
+
+@keyframes fadeIn {
+ to {
+   opacity: 1;
+ }
+}
+
+/* Classes para melhorar o contraste */
+.text-green-accessible {
+ color: #0f6c34; /* Verde mais escuro para fundos claros */
+}
+
+.text-green-accessible-light {
+ color: #4ade80; /* Verde mais claro para fundos escuros */
+}
