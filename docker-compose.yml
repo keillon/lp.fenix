@@ -39,23 +39,43 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
+    depends_on:
+      - mongodb
     
   nginx:
     image: nginx:stable-alpine
     restart: always
     ports:
       - "80:80"
-      # Remova a porta 443 até configurarmos SSL
-      # - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      # Remova o volume letsencrypt até termos os certificados
-      # - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - frontend
     networks:
       - fenix-network
 
+  mongodb:
+    image: mongo:6
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: appuser
+      MONGO_INITDB_ROOT_PASSWORD: password123
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - fenix-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
 networks:
   fenix-network:
     driver: bridge
+
+volumes:
+  mongodb_data:

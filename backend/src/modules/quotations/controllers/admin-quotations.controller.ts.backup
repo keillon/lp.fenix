@@ -1,0 +1,35 @@
+import { Controller, Get, Patch, Param, Body, UseGuards } from '@nestjs/common';
+import { QuotationsService } from '../services/quotations.service';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../../common/guards/roles.guard';
+import { Roles } from '../../../common/decorators/roles.decorator';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { UpdateQuotationDto } from '../dto/update-quotation.dto';
+
+@ApiTags('Admin Quotations')
+@Controller('admin/quotations')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles('admin', 'manager')
+@ApiBearerAuth()
+export class AdminQuotationsController {
+  constructor(private readonly quotationsService: QuotationsService) {}
+
+  @Get()
+  @ApiOperation({ summary: 'Listar todas as cotações (admin)' })
+  @ApiResponse({ status: 200, description: 'Cotações listadas com sucesso' })
+  findAll() {
+    return this.quotationsService.findAll();
+  }
+
+  @Patch(':id/status')
+  @ApiOperation({ summary: 'Atualizar status de uma cotação (admin)' })
+  @ApiResponse({ status: 200, description: 'Status atualizado com sucesso' })
+  updateStatus(
+    @Param('id') id: string,
+    @Body('status') status: 'pending' | 'approved' | 'rejected' | 'completed' | 'cancelled',
+    @Body('value') value?: string,
+    @Body('message') message?: string,
+  ) {
+    return this.quotationsService.updateStatus(id, status, value, message);
+  }
+}

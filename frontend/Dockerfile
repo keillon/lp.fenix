@@ -7,6 +7,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
+# Instalar dependências necessárias para o Sharp
+RUN apk add --no-cache vips-dev python3 make g++
+
 # Habilitar o cache do pnpm para acelerar builds futuros
 RUN corepack enable
 
@@ -16,7 +19,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml* ./
 
 # Instalar dependências utilizando pnpm (com cache eficiente)
-RUN pnpm install --frozen-lockfile --prod=false
+RUN pnpm install --no-frozen-lockfile
 
 # Copiar o restante dos arquivos do projeto
 COPY . .
@@ -57,8 +60,8 @@ USER nextjs
 EXPOSE 3000
 
 # Configurar variáveis de ambiente para o servidor
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
 # Comando para iniciar o servidor standalone do Next.js
 CMD ["node", "server.js"]

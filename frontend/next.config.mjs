@@ -9,9 +9,6 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Configuração de produção: habilitar standalone para containerização
-  output: 'standalone',
-  
   // Ignorar verificações durante build para evitar falhas
   eslint: {
     ignoreDuringBuilds: true,
@@ -20,17 +17,14 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   
-  // Configuração de imagens otimizada para produção
+  // Configuração de imagens simplificada
   images: {
-    unoptimized: true, // Mantido como true para compatibilidade
-    domains: ['localhost'],
-    formats: ['image/avif', 'image/webp'],
+    unoptimized: true,
+    disableStaticImages: false,
     remotePatterns: [
       {
-        protocol: 'http',
-        hostname: 'localhost',
-        port: '3000',
-        pathname: '/**',
+        protocol: 'https',
+        hostname: '**',
       },
     ],
   },
@@ -47,17 +41,18 @@ const nextConfig = {
       };
     }
     
+    // Configuração básica para imagens
+    config.module.rules.push({
+      test: /\.(png|jpg|gif|webp)$/i,
+      type: 'asset/resource'
+    });
+    
     return config;
   },
   
   // Desligar experimentais que podem causar problemas
   experimental: {
     webpackBuildWorker: false,
-    parallelServerBuildTraces: false,
-    parallelServerCompiles: false,
-    // Habilitar estas opções pode melhorar o desempenho em produção
-    serverMinification: true,
-    serverSourceMaps: false,
   },
   
   // Melhorias para produção

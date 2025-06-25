@@ -1,0 +1,12 @@
+# trata tudo como texto, exceto extensões abaixo
+* text=auto
+
+# marca imagens como binárias (sem conversão de linha)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.svg binary
+*.ico binary
+*.gif binary
+*.png filter=lfs diff=lfs merge=lfs -text
