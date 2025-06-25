@@ -22,7 +22,6 @@ const Services = dynamic(() => import("@/components/services"));
 const SectionEstoque = dynamic(() => import("@/components/SectionEstoque"));
 const CallToAction = dynamic(() => import("@/components/call-to-action"));
 const Footer = dynamic(() => import("@/components/footer"));
-const WhatsappButton = dynamic(() => import("@/components/WhatsappButton"));
 
 export default function Home() {
   return (
@@ -45,7 +44,6 @@ export default function Home() {
         <CallToAction />
       </main>
       <Footer />
-      <WhatsappButton />
     </div>
   );
 }
