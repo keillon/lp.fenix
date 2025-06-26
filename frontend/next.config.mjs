@@ -60,6 +60,7 @@ const nextConfig = {
   reactStrictMode: false, // Desabilitar para produção
   compress: true, // Garantir que a compressão gzip esteja ativada
   generateEtags: true, // Habilitar ETags para caching
+  output: 'standalone',
 }
 
 mergeConfig(nextConfig, userConfig)

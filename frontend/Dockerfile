@@ -45,9 +45,10 @@ RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 --ingroup nodejs nextjs
 
 # Copiar apenas os diretórios e arquivos necessários para executar a aplicação
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 
 # Definir permissões adequadas para os arquivos
 RUN chmod -R 550 .next && \
@@ -63,5 +64,5 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Comando para iniciar o servidor standalone do Next.js
-CMD ["node", "server.js"]
+# Comando para iniciar o servidor Next.js
+CMD ["node", "node_modules/next/dist/bin/next", "start"]

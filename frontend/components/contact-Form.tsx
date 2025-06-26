@@ -201,38 +201,63 @@ export default function ContactForm({
     }
   };
 
+  // Função para enviar cotação
+  const sendQuotation = async (data: FormData): Promise<boolean> => {
+    try {
+      const payload = {
+        name: data.name,
+        email: data.email,
+        phone: data.phone.replace(/\D/g, ""),
+        cnpj: data.cnpj.replace(/\D/g, ""),
+        message: data.message,
+      };
+      const response = await fetch(`${API_BASE_URL}/quotations`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        console.error(`Erro ao enviar cotação: ${response.status} ${response.statusText}`);
+        return false;
+      }
+      try {
+        const json = await response.json();
+        console.log("Cotação enviada com sucesso!", json);
+      } catch {
+        console.log("Cotação enviada com sucesso! (Sem resposta JSON)");
+      }
+      return true;
+    } catch (err) {
+      console.error("Erro ao tentar enviar cotação:", err);
+      return false;
+    }
+  };
+
   // Função de submissão do formulário
   const onSubmit = async (data: FormData) => {
     setSubmitting(true);
     setError(null);
-
+    setSuccess(false);
+    let leadOk = true;
+    let quotationOk = true;
     try {
-      console.log("Salvando lead no banco de dados...");
-      const leadSaved = await saveLead(data);
-
-      if (!leadSaved) {
-        console.warn("Lead não pôde ser salvo, mas continuando com a mensagem do WhatsApp");
+      if (title?.toLowerCase().includes("cotaç") || title?.toLowerCase().includes("orcament")) {
+        quotationOk = await sendQuotation(data);
+      } else {
+        leadOk = await saveLead(data);
       }
-
-      console.log("Enviando mensagem pelo WhatsApp...");
-      await sendWhatsAppMessage(data);
-
-      onSubmitSuccess?.(data);
-      setSuccess(true);
-
-      setTimeout(() => {
+      const whatsOk = await sendWhatsAppMessage(data);
+      if ((leadOk || quotationOk) && whatsOk) {
+        setSuccess(true);
+        if (onSubmitSuccess) onSubmitSuccess(data);
         reset();
-        setSuccess(false);
-        setCnpjValid(null);
-        onOpenChange(false);
-      }, 2000);
+      } else {
+        setError("Erro ao enviar o formulário. Tente novamente.");
+      }
     } catch (err) {
-      console.error("Erro ao enviar formulário:", err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Ocorreu um erro ao enviar a mensagem. Por favor, tente novamente."
-      );
+      setError("Erro ao enviar o formulário. Tente novamente.");
     } finally {
       setSubmitting(false);
     }

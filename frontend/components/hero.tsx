@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import ContactForm from "@/components/contact-Form";
 import { Button } from "@/components/ui/button";
-import HeroLogo from "../public/tecnico-hero.webp";
+import HeroLogo from "@/public/tecnico-hero.webp";
 
 // Variantes de animação para os blocos de conteúdo
 const leftBlockVariants = {
