@@ -26,7 +26,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.lpfenix.rule=Host(`lp.fenixtelecom.com.br`)"
       - "traefik.http.services.lpfenix.loadbalancer.server.port=3000"
-      - "traefik.http.routers.lpfenix.entrypoints=web"
+      - "traefik.http.routers.lpfenix.entrypoints=web,websecure"
 
   backend:
     build:
