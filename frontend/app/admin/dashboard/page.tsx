@@ -330,6 +330,7 @@ export default function AdminDashboard() {
   const [deleteLead, setDeleteLead] = useState<Lead | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0); // Para forçar o recarregamento
+  const [detailsLead, setDetailsLead] = useState<Lead | null>(null); // Novo estado para o modal de detalhes
 
   // Redireciona para login se não estiver autenticado
   useEffect(() => {
@@ -770,6 +771,13 @@ export default function AdminDashboard() {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <button
+                              onClick={() => setDetailsLead(lead)}
+                              className="bg-blue-100 text-blue-700 py-1 px-3 rounded-md hover:bg-blue-200 transition inline-flex items-center mr-2"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 mr-1"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                              Detalhes
+                            </button>
+                            <button
                               onClick={() => handleSendWhatsApp(lead)}
                               className="bg-green-100 text-green-700 py-1 px-3 rounded-md hover:bg-green-200 transition inline-flex items-center mr-2"
                             >
@@ -795,6 +803,63 @@ export default function AdminDashboard() {
         </div>
       </main>
 
+      {/* Modal de detalhes do lead */}
+      {detailsLead && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl max-w-2xl w-full">
+            <h3 className="text-lg font-medium text-gray-900 mb-4 flex justify-between items-center">
+              Detalhes do Lead
+              <button
+                onClick={() => setDetailsLead(null)}
+                className="text-gray-400 hover:text-gray-500"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <h4 className="text-sm font-medium text-gray-500">Nome</h4>
+                <p className="mt-1 text-sm text-gray-900">{detailsLead.nome}</p>
+              </div>
+              <div>
+                <h4 className="text-sm font-medium text-gray-500">Email</h4>
+                <p className="mt-1 text-sm text-gray-900">{detailsLead.email}</p>
+              </div>
+              <div>
+                <h4 className="text-sm font-medium text-gray-500">Telefone</h4>
+                <p className="mt-1 text-sm text-gray-900">{detailsLead.telefone}</p>
+              </div>
+              <div>
+                <h4 className="text-sm font-medium text-gray-500">CNPJ</h4>
+                <p className="mt-1 text-sm text-gray-900">{detailsLead.cnpj || "-"}</p>
+              </div>
+              <div>
+                <h4 className="text-sm font-medium text-gray-500">Mensagem</h4>
+                <p className="mt-1 text-sm text-gray-900 whitespace-pre-wrap">{detailsLead.mensagem || "-"}</p>
+              </div>
+              <div>
+                <h4 className="text-sm font-medium text-gray-500">Pedido</h4>
+                <p className="mt-1 text-sm text-gray-900">{detailsLead.pedido || "-"}</p>
+              </div>
+              <div>
+                <h4 className="text-sm font-medium text-gray-500">Data de Criação</h4>
+                <p className="mt-1 text-sm text-gray-900">{formatDate(detailsLead.createdAt)}</p>
+              </div>
+            </div>
+            <div className="mt-6 flex justify-end">
+              <button
+                type="button"
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition"
+                onClick={() => setDetailsLead(null)}
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Modal de confirmação de exclusão */}
       {deleteLead && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
