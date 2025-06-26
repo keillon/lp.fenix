@@ -3,17 +3,21 @@ version: '3'
 services:
   traefik:
     image: traefik:v2.10
-    restart: always
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     ports:
       - "80:80"      # HTTP
       - "443:443"    # HTTPS
       - "8080:8080"  # Dashboard
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik/acme.json:/acme.json
       - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/acme.json:/letsencrypt/acme.json
     networks:
-      - traefik_default
+      - web
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dashboard.rule=Host(`lp.fenixtelecom.com.br`) && PathPrefix(`/dashboard`)"
@@ -21,5 +25,5 @@ services:
       - "traefik.http.routers.dashboard.entrypoints=web,websecure"
 
 networks:
-  traefik_default:
-    external: false
+  web:
+    external: true
