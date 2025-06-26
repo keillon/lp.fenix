@@ -4,7 +4,6 @@ import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { Facebook, Instagram } from "lucide-react"
-import Logo from "../public//logo-fenix-branca.webp";
 
 export default function Footer() {
   const footerLinks = [
@@ -88,7 +87,7 @@ export default function Footer() {
               <Link href="/" className="text-2xl font-bold text-white">
                 <div className="relative md:w-48 w-36 h-16">
                   <Image
-                    src={Logo}
+                    src="/logo-fenix-branca.webp"
                     alt="Logo fênix telecom"
                     fill
                     priority

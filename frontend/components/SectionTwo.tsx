@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import ContactForm from "@/components/contact-Form";
 import { Button } from "@/components/ui/button";
-import EstoqueLogo from "../public/fornecedor.webp";
 // Variantes de animação para os blocos
 const imageVariants = {
   hidden: { opacity: 0, x: 50 },
@@ -37,7 +36,7 @@ export default function SectionTwo() {
               className="relative h-full"
             >
               <Image
-                src={EstoqueLogo}
+                src="/fornecedor.webp"
                 priority={true}
                 alt="Pessoa e caixas"
                 width={600}

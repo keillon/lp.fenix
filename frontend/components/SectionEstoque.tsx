@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import ContactForm from "@/components/contact-Form";
 import { useState } from "react";
-import EstoqueLogo from "../public/estoque.webp";
 
 export default function SectionTwo() {
   const [showForm, setShowForm] = useState(false);
@@ -26,7 +25,7 @@ export default function SectionTwo() {
               className="relative h-full"
             >
               <Image
-                src={EstoqueLogo}
+                src="/estoque.webp"
                 priority={true}
                 alt="Pessoa e caixas"
                 width={600}
