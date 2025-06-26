@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import ContactForm from "@/components/contact-Form";
 import { Button } from "@/components/ui/button";
-import OrcamentoLogo from '../public/orcamento.webp'
+
 
 // Variantes para animação dos blocos
 const leftBlockVariants = {
@@ -67,7 +67,7 @@ export default function Orcamento() {
               className="relative h-full"
             >
               <Image
-                src={OrcamentoLogo}
+                src="/orcamento.webp"
                 alt="Pessoas conversando por telefone"
                 width={500}
                 height={600}
