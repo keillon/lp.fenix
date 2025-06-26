@@ -10,10 +10,16 @@ providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
+    watch: true
 
 entryPoints:
   web:
     address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
   websecure:
     address: ":443"
 
@@ -21,7 +27,7 @@ certificatesResolvers:
   letsencrypt:
     acme:
       email: admin@fenixtelecom.com.br
-      storage: /data/acme.json
+      storage: /letsencrypt/acme.json
       httpChallenge:
         entryPoint: web
 
