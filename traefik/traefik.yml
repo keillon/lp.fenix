@@ -10,15 +10,6 @@ providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
-    network: traefik
-
-experimental:
-  http3: true
-
-log:
-  level: INFO
-
-accessLog: {}
 
 entryPoints:
   web:
@@ -30,9 +21,17 @@ certificatesResolvers:
   letsencrypt:
     acme:
       email: admin@fenixtelecom.com.br
-      storage: /letsencrypt/acme.json
+      storage: /data/acme.json
       httpChallenge:
         entryPoint: web
+
+experimental:
+  http3: true
+
+log:
+  level: INFO
+
+accessLog: {}
 
 pilot:
   dashboard: false 
