@@ -55,7 +55,7 @@ if docker ps | grep -q "mongo"; then
   TIMESTAMP=$(date +%Y%m%d_%H%M%S)
   BACKUP_DIR="./backups"
   mkdir -p $BACKUP_DIR
-  docker exec $(docker ps -q -f name=mongo) mongodump --uri="mongodb://appuser:password123@195.35.40.86:27017/LpFenix?authSource=admin" --archive > "$BACKUP_DIR/mongodb_backup_$TIMESTAMP.archive"
+  docker exec $(docker ps -q -f name=mongo) mongodump --uri="mongodb://appuser:password123@localhost:27017/LpFenix?authSource=admin" --archive > "$BACKUP_DIR/mongodb_backup_$TIMESTAMP.archive"
   log_success "Backup salvo em $BACKUP_DIR/mongodb_backup_$TIMESTAMP.archive"
 else
   log_info "Container MongoDB não está rodando. Pulando backup."
