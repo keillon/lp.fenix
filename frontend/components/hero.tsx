@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import ContactForm from "@/components/contact-Form";
 import { Button } from "@/components/ui/button";
-import HeroLogo from "@/public/tecnico-hero.webp";
 
 // Variantes de animação para os blocos de conteúdo
 const leftBlockVariants = {
@@ -67,7 +66,7 @@ export default function Hero() {
               className="relative h-full"
             >
               <Image
-                src={HeroLogo}
+                src="/tecnico-hero.webp"
                 alt="Técnico e produtos telecom"
                 width={600}
                 height={600}
