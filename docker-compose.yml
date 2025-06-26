@@ -54,6 +54,7 @@ services:
 
   mongodb:
     image: mongo:6
+    container_name: lpfenix_mongodb
     restart: always
     ports:
       - "27017:27017"
@@ -61,7 +62,9 @@ services:
       MONGO_INITDB_ROOT_USERNAME: appuser
       MONGO_INITDB_ROOT_PASSWORD: password123
     volumes:
-      - mongodb_data:/data/db
+      - type: volume
+        source: mongodb_data
+        target: /data/db
     networks:
       - fenix-network
       - web
@@ -80,3 +83,4 @@ networks:
 
 volumes:
   mongodb_data:
+    name: lpfenix_mongodb_data
