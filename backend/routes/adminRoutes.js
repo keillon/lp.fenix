@@ -1,4 +1,5 @@
 // backend/routes/adminRoutes.js
+console.log('[INIT] Carregando adminRoutes.js');
 
 const express = require('express');
 const router = express.Router();
@@ -47,17 +48,29 @@ router.post('/register', async (req, res) => {
  * POST /api/admin/login
  */
 router.post('/login', async (req, res) => {
-  console.log('[LOGIN] Requisição recebida:', { body: req.body, headers: req.headers });
+  console.log('[LOGIN] Requisição recebida:', { 
+    body: req.body, 
+    headers: req.headers,
+    url: req.url,
+    method: req.method 
+  });
+  
   try {
     const { email, password } = req.body;
-    console.log('[LOGIN] Tentativa de login:', { email });
+    console.log('[LOGIN] Dados extraídos:', { email });
     
     const admin = await Admin.findOne({ email });
+    console.log('[LOGIN] Admin encontrado:', admin ? { 
+      id: admin._id,
+      email: admin.email,
+      role: admin.role,
+      passwordLength: admin.password?.length 
+    } : 'Não encontrado');
+
     if (!admin) {
       console.log('[LOGIN] Admin não encontrado:', { email });
       return res.status(400).json({ success: false, message: 'Credenciais inválidas.' });
     }
-    console.log('[LOGIN] Admin encontrado:', { email, role: admin.role });
 
     const isMatch = await bcrypt.compare(password, admin.password);
     console.log('[LOGIN] Resultado da comparação de senha:', { isMatch });
