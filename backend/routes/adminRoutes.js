@@ -49,13 +49,20 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log('[LOGIN] Tentativa de login:', { email });
+    
     const admin = await Admin.findOne({ email });
     if (!admin) {
+      console.log('[LOGIN] Admin não encontrado:', { email });
       return res.status(400).json({ success: false, message: 'Credenciais inválidas.' });
     }
+    console.log('[LOGIN] Admin encontrado:', { email, role: admin.role });
 
     const isMatch = await bcrypt.compare(password, admin.password);
+    console.log('[LOGIN] Resultado da comparação de senha:', { isMatch });
+    
     if (!isMatch) {
+      console.log('[LOGIN] Senha incorreta para:', { email });
       return res.status(400).json({ success: false, message: 'Credenciais inválidas.' });
     }
 
@@ -68,6 +75,7 @@ router.post('/login', async (req, res) => {
     };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
+    console.log('[LOGIN] Login bem-sucedido:', { email });
     return res.json({ success: true, token, admin });
   } catch (error) {
     console.error('Erro no login do admin:', error);
