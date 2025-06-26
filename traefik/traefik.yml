@@ -1,0 +1,33 @@
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
+api:
+  dashboard: true
+  insecure: true
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    watch: true
+    exposedByDefault: false
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+
+  websecure:
+    address: ":443"
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: seu-email@fenixtelecom.com.br
+      storage: acme.json
+      httpChallenge:
+        entryPoint: web 
