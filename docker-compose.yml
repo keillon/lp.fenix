@@ -2,38 +2,11 @@
 # A diretiva "version" foi removida, pois não é mais necessária
 
 services:
-  traefik:
-    image: traefik:v2.10
-    restart: always
-    ports:
-      - "80:80"      # HTTP
-      - "443:443"    # HTTPS
-      - "8080:8080"  # Dashboard
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik/acme.json:/acme.json
-      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
-      - ./traefik/config:/etc/traefik/config:ro
-    networks:
-      - fenix-network
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.dashboard.rule=Host(`lp.fenixtelecom.com.br`) && PathPrefix(`/dashboard`)"
-      - "traefik.http.routers.dashboard.service=api@internal"
-      - "traefik.http.routers.dashboard.entrypoints=web,websecure"
-      - "traefik.http.routers.dashboard.middlewares=auth"
-      - "traefik.http.middlewares.auth.basicauth.users=admin:$$apr1$$9IDrvyiB$$pvNj/B5YF3JyJ4ni8yxUx/"  # senha: admin123
-
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     restart: always
-    # Não expor porta diretamente
-    # ports:
-    #   - "3000:3000"
-    env_file:
-      - .env.frontend
     networks:
       - fenix-network
     healthcheck:
@@ -57,10 +30,6 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     restart: always
-    ports:
-      - "5002:5000"
-    env_file:
-      - .env.backend
     networks:
       - fenix-network
     healthcheck:
@@ -80,17 +49,6 @@ services:
       - "traefik.http.routers.lpfenix-api.tls.certresolver=letsencrypt"
       - "traefik.http.routers.lpfenix-api.middlewares=api-strip"
       - "traefik.http.middlewares.api-strip.stripprefix.prefixes=/api"
-
-  # Remover o serviço nginx
-  # nginx:
-  #   image: nginx:stable-alpine
-  #   restart: always
-  #   ports:
-  #     - "8090:80"
-  #   volumes:
-  #     - ./nginx/conf/default.conf:/etc/nginx/conf.d/default.conf:ro
-  #   networks:
-  #     - fenix-network
 
   mongodb:
     image: mongo:6
@@ -113,7 +71,8 @@ services:
 
 networks:
   fenix-network:
-    driver: bridge
+    external: true
+    name: traefik_default
 
 volumes:
   mongodb_data:
