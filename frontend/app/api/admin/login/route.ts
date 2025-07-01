@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Faz a requisição para o backend
-    const backendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
+    const backendUrl = process.env.BACKEND_URL || 'http://backend:5000';
     console.log('[LOGIN] Tentando conectar ao backend:', backendUrl);
     
     const response = await fetch(`${backendUrl}/api/admin/login`, {

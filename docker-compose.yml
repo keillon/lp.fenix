@@ -35,6 +35,7 @@ services:
       - "traefik.http.routers.lpfenix.entrypoints=web,websecure"
       - "traefik.http.routers.lpfenix.tls=true"
       - "traefik.http.routers.lpfenix.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=web"
 
   backend:
     build:
@@ -69,6 +70,7 @@ services:
       - "traefik.http.routers.lpfenix-api.entrypoints=web,websecure"
       - "traefik.http.routers.lpfenix-api.tls=true"
       - "traefik.http.routers.lpfenix-api.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=web"
 
   mongodb:
     image: mongo:6
