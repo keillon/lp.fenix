@@ -11,6 +11,7 @@ providers:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
     watch: true
+    network: web
 
 entryPoints:
   web:
@@ -22,6 +23,11 @@ entryPoints:
           scheme: https
   websecure:
     address: ":443"
+    transport:
+      respondingTimeouts:
+        readTimeout: "30s"
+        writeTimeout: "30s"
+        idleTimeout: "180s"
 
 certificatesResolvers:
   letsencrypt:
@@ -35,7 +41,7 @@ experimental:
   http3: true
 
 log:
-  level: INFO
+  level: DEBUG
 
 accessLog: {}
 

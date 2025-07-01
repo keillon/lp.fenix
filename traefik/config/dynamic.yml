@@ -1,0 +1,45 @@
+http:
+  routers:
+    lpfenix-web:
+      rule: "Host(`lp.fenixtelecom.com.br`)"
+      service: "lpfenix-web-service"
+      entryPoints:
+        - web
+        - websecure
+      tls:
+        certResolver: letsencrypt
+      priority: 10
+    
+    lpfenix-api:
+      rule: "Host(`lp.fenixtelecom.com.br`) && PathPrefix(`/api`)"
+      service: "lpfenix-api-service"
+      entryPoints:
+        - web
+        - websecure
+      tls:
+        certResolver: letsencrypt
+  
+  services:
+    lpfenix-web-service:
+      loadBalancer:
+        servers:
+          - url: "http://frontend:3000"
+        responseForwarding:
+          flushInterval: "100ms"
+        passHostHeader: true
+        healthCheck:
+          path: /
+          interval: "10s"
+          timeout: "3s"
+    
+    lpfenix-api-service:
+      loadBalancer:
+        servers:
+          - url: "http://backend:5000"
+        responseForwarding:
+          flushInterval: "100ms"
+        passHostHeader: true
+        healthCheck:
+          path: /api/health
+          interval: "10s"
+          timeout: "3s" 
