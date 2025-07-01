@@ -32,7 +32,10 @@ app.use(cors({
 }));
 
 // 7. Helmet para aumentar a segurança dos cabeçalhos HTTP
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false
+}));
 
 // 8. Morgan para logs das requisições (modo 'combined' para produção)
 const logMode = process.env.NODE_ENV === 'production' ? 'combined' : 'dev';
