@@ -12,6 +12,7 @@ providers:
     exposedByDefault: false
     watch: true
     network: web
+    swarmMode: false
   file:
     directory: "/etc/traefik/config"
     watch: true
@@ -31,6 +32,9 @@ entryPoints:
         readTimeout: "30s"
         writeTimeout: "30s"
         idleTimeout: "180s"
+      lifeCycle:
+        requestAcceptGraceTimeout: "10s"
+        graceTimeOut: "30s"
     http:
       tls:
         certResolver: letsencrypt
@@ -50,10 +54,11 @@ experimental:
 
 log:
   level: DEBUG
-  filePath: "/var/log/traefik.log"
+  format: json
 
 accessLog:
-  filePath: "/var/log/access.log"
+  format: json
+  bufferingSize: 100
 
 ping:
   entryPoint: traefik

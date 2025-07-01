@@ -9,6 +9,8 @@ http:
       tls:
         certResolver: letsencrypt
       priority: 10
+      middlewares:
+        - retry-middleware
     
     lpfenix-api:
       rule: "Host(`lp.fenixtelecom.com.br`) && PathPrefix(`/api`)"
@@ -18,28 +20,41 @@ http:
         - websecure
       tls:
         certResolver: letsencrypt
+      middlewares:
+        - retry-middleware
   
   services:
     lpfenix-web-service:
       loadBalancer:
         servers:
           - url: "http://frontend:3000"
-        responseForwarding:
-          flushInterval: "100ms"
-        passHostHeader: true
         healthCheck:
           path: /
           interval: "10s"
-          timeout: "3s"
+          timeout: "5s"
+          retries: 3
+        serversTransport: "default-transport"
     
     lpfenix-api-service:
       loadBalancer:
         servers:
           - url: "http://backend:5000"
-        responseForwarding:
-          flushInterval: "100ms"
-        passHostHeader: true
         healthCheck:
           path: /api/health
           interval: "10s"
-          timeout: "3s" 
+          timeout: "5s"
+          retries: 3
+        serversTransport: "default-transport"
+
+  middlewares:
+    retry-middleware:
+      retry:
+        attempts: 3
+        initialInterval: "100ms"
+
+  serversTransports:
+    default-transport:
+      forwardingTimeouts:
+        dialTimeout: "30s"
+        responseHeaderTimeout: "30s"
+        idleConnTimeout: "180s" 
