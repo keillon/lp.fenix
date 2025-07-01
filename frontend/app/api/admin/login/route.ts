@@ -16,6 +16,8 @@ export async function POST(request: NextRequest) {
 
     // Faz a requisição para o backend
     const backendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
+    console.log('[LOGIN] Tentando conectar ao backend:', backendUrl);
+    
     const response = await fetch(`${backendUrl}/api/admin/login`, {
       method: 'POST',
       headers: {
@@ -26,6 +28,7 @@ export async function POST(request: NextRequest) {
 
     // Obtém a resposta do backend
     const data = await response.json();
+    console.log('[LOGIN] Resposta do backend:', { success: data.success, hasToken: !!data.token });
 
     // Se o login falhou no backend
     if (!response.ok) {
@@ -51,7 +54,7 @@ export async function POST(request: NextRequest) {
 
     return responseObj;
   } catch (error) {
-    console.error('[API] Erro no login:', error);
+    console.error('[LOGIN] Erro no login:', error);
     return NextResponse.json(
       { success: false, message: 'Erro interno do servidor' },
       { status: 500 }

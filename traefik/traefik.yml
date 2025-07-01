@@ -12,6 +12,9 @@ providers:
     exposedByDefault: false
     watch: true
     network: web
+  file:
+    directory: "/etc/traefik/config"
+    watch: true
 
 entryPoints:
   web:
@@ -28,6 +31,11 @@ entryPoints:
         readTimeout: "30s"
         writeTimeout: "30s"
         idleTimeout: "180s"
+    http:
+      tls:
+        certResolver: letsencrypt
+        domains:
+          - main: "lp.fenixtelecom.com.br"
 
 certificatesResolvers:
   letsencrypt:
@@ -42,8 +50,13 @@ experimental:
 
 log:
   level: DEBUG
+  filePath: "/var/log/traefik.log"
 
-accessLog: {}
+accessLog:
+  filePath: "/var/log/access.log"
+
+ping:
+  entryPoint: traefik
 
 pilot:
   dashboard: false 

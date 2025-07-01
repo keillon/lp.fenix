@@ -53,8 +53,6 @@ services:
       - "traefik.http.routers.lpfenix-api.entrypoints=web,websecure"
       - "traefik.http.routers.lpfenix-api.tls=true"
       - "traefik.http.routers.lpfenix-api.tls.certresolver=letsencrypt"
-      - "traefik.http.middlewares.lpfenix-strip-api.stripprefix.prefixes=/api"
-      - "traefik.http.routers.lpfenix-api.middlewares=lpfenix-strip-api@docker"
 
   mongodb:
     image: mongo:6
