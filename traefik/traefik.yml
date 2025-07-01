@@ -13,9 +13,9 @@ providers:
     watch: true
     network: web
     swarmMode: false
-  file:
-    directory: "/etc/traefik/config"
-    watch: true
+#  file:
+#    directory: "/etc/traefik/config"
+#    watch: true
 
 entryPoints:
   web:
